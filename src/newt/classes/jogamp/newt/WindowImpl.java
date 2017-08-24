@@ -3391,16 +3391,17 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer
 
     public final void sendMouseEvent(final short eventType, final int modifiers,
                                      final int x, final int y, final short button, final float rotation) {
-        doMouseEvent(false, false, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f);
+        doMouseEvent(false, false, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f, 0f);
     }
 
     public final void enqueueMouseEvent(final boolean wait, final short eventType, final int modifiers,
                                         final int x, final int y, final short button, final float rotation) {
-        doMouseEvent(true, wait, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f);
+        doMouseEvent(true, wait, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f, 0f);
     }
-    protected final void doMouseEvent(final boolean enqueue, final boolean wait, final short eventType, final int modifiers,
-                                      final int x, final int y, final short button, final float rotation) {
-        doMouseEvent(enqueue, wait, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f);
+
+    public final void enqueueMouseEvent(final boolean wait, final short eventType, final int modifiers,
+                                        final int x, final int y, final short button, final float rotation, final float pressure) {
+        doMouseEvent(true, wait, eventType, modifiers, x, y, button, MouseEvent.getRotationXYZ(rotation, modifiers), 1f, pressure);
     }
     /**
     public final void sendMouseEvent(final short eventType, final int modifiers,
@@ -3420,13 +3421,13 @@ public abstract class WindowImpl implements Window, NEWTEventConsumer
      * @param wait if true wait until {@link #consumeEvent(NEWTEvent) consumed}.
      */
     protected void doMouseEvent(final boolean enqueue, final boolean wait, final short eventType, final int modifiers,
-                                final int x, final int y, final short button, final float[] rotationXYZ, final float rotationScale) {
+                                final int x, final int y, final short button, final float[] rotationXYZ, final float rotationScale, final float pressure) {
         if( 0 > button || button > MouseEvent.BUTTON_COUNT ) {
             throw new NativeWindowException("Invalid mouse button number" + button);
         }
         doPointerEvent(enqueue, wait, constMousePointerTypes, eventType, modifiers,
                        0 /*actionIdx*/, new short[] { (short)0 }, button,
-                       new int[]{x}, new int[]{y}, new float[]{0f} /*pressure*/,
+                       new int[]{x}, new int[]{y}, new float[]{pressure},
                        1f /*maxPressure*/, rotationXYZ, rotationScale);
     }
 

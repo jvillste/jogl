@@ -689,7 +689,7 @@ static jmethodID windowRepaintID = NULL;
     (*env)->CallVoidMethod(env, javaWindowObject, enqueueMouseEventID, JNI_FALSE,
                            evType, javaMods[0],
                            (jint) location.x, (jint) location.y,
-                           javaButtonNum, scrollDeltaY);
+                           javaButtonNum, scrollDeltaY, event.pressure);
 
     // detaching thread not required - daemon
     // NewtCommon_ReleaseJNIEnv(shallBeDetached);
@@ -826,7 +826,7 @@ NS_ENDHANDLER
 
 + (BOOL) initNatives: (JNIEnv*) env forClass: (jclass) clazz
 {
-    enqueueMouseEventID = (*env)->GetMethodID(env, clazz, "enqueueMouseEvent", "(ZSIIISF)V");
+    enqueueMouseEventID = (*env)->GetMethodID(env, clazz, "enqueueMouseEvent", "(ZSIIISFF)V");
     enqueueKeyEventID = (*env)->GetMethodID(env, clazz, "enqueueKeyEvent", "(ZSISCC)V");
     sizeChangedID = (*env)->GetMethodID(env, clazz, "sizeChanged", "(ZIIZ)V");
     updatePixelScaleID = (*env)->GetMethodID(env, clazz, "updatePixelScale", "(ZFF)V");
